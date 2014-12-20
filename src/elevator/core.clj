@@ -1,22 +1,20 @@
 (ns elevator.core)
 
-(def max 10)
-(def min 1)
+(def top 10)
+(def bottom 1)
 
 (def down 0)
 
 (def elevator {:floor 1 :direction :up})
 
 (defn move
-  [el]
-  (let [was (:direction el)
-        how (was {:up + :down -})
-        floor (how 1 (:floor el))
-        [floor now] (cond (> floor max) [max :down]
-                          (< floor min) [min :up]
-                          :else [floor was])]
-    {:how how :floor floor}
-    {:floor floor :direction now}))
+  [{:keys [floor direction]}]
+  {:pre [(integer? floor) (#{:up :down} direction)]}
+  (let [floor ((direction {:up inc :down dec}) floor)
+        [floor direction] (cond (> floor top) [top :down]
+                                (< floor bottom) [bottom :up]
+                                :else [floor direction])]
+    {:floor floor :direction direction}))
 
 (move elevator)
 {:floor 2, :direction :up}
@@ -27,3 +25,4 @@
 {:floor 1, :direction :up}
 {:floor 10, :direction :down}
 
+(move {:floor 7 :direction :up})
