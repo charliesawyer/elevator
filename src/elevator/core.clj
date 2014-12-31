@@ -12,11 +12,10 @@
 (defn move
   [{:keys [floor direction]}]
   {:pre [(integer? floor) (direction? direction)]}
-  (let [floor ((direction {:up inc :down dec}) floor)
-        [floor direction] (cond (> floor top) [top :down]
-                                (< floor bottom) [bottom :up]
-                                :else [floor direction])]
-    {:floor floor :direction direction}))
+  (let [floor ((direction {:up inc :down dec}) floor)]
+    (cond (> floor top)    {:floor top    :direction :down}
+          (< floor bottom) {:floor bottom :direction :up}
+          :else            {:floor floor  :direction direction})))
 
 (move elevator)
 {:floor 2, :direction :up}
