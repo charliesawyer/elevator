@@ -70,7 +70,7 @@
   {:down :up :up :down})
 
 (defn do-in
-  "Map m with f applied to value at keys."
+  "Map m with f applied to value at ks."
   [f m ks]
   (assoc-in m ks (f (get-in m ks))))
 
