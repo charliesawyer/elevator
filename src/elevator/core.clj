@@ -58,3 +58,21 @@
    {:floor  3, :direction :up})
 
   "... in the REPL.")
+
+(def building
+  "A building with some elevators."
+  {:elevators [{:floor 1 :direction :up}
+               {:floor 9 :direction :down}]})
+
+(def reverse-direction
+  "Reverse an elevator's direction."
+  {:down :up :up :down})
+
+(defn do-in
+  "Map m with f applied to value at keys."
+  [f m keys]
+  (assoc-in m keys (f (get-in m keys))))
+
+(do-in inc building [:elevators 1 :floor])
+
+(do-in reverse-direction building [:elevators 1 :direction])
