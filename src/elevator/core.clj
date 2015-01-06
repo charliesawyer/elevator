@@ -2,7 +2,7 @@
 
 (def elevator
   "An elevator for illustration."
-  {:floor 1 :direction :up})
+  {:floor 1 :direction :up :passengers 2 :stops #{2 3}})
 
 (def direction?
   "Nil or the function to apply to :floor for direction :down or :up."
@@ -61,8 +61,9 @@
 
 (def building
   "A building with some elevators."
-  {:elevators [{:floor 1 :direction :up}
-               {:floor 9 :direction :down}]})
+  {:elevators [{:floor 1 :direction :up   :passengers 1}
+               {:floor 9 :direction :down :passengers 2}]
+   :stops #{1 3}})
 
 (def reverse-direction
   "Reverse an elevator's direction."
@@ -70,9 +71,24 @@
 
 (defn do-in
   "Map m with f applied to value at keys."
-  [f m keys]
-  (assoc-in m keys (f (get-in m keys))))
+  [f m ks]
+  (assoc-in m ks (f (get-in m ks))))
+
+
+(defn board
+  "Add a passenger for stop to elevator."
+  [elevator stop]
+  (do-in (fn [stops] (conj stops stop))
+         (do-in inc elevator [:passengers])
+         [:stops]))
+
+(board elevator 7)
 
 (do-in inc building [:elevators 1 :floor])
 
 (do-in reverse-direction building [:elevators 1 :direction])
+
+(def movies #{{:title "Citizen Kane" :year 1941}
+              {:title "Birth of a Nation" :year 1915}})
+
+(:title (first (sort-by :year movies)))
